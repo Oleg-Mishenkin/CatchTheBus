@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CAE6C00-DEF6-4E8B-A73B-55648331AC40}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{90A4E23A-13E9-4565-885D-B10D8448690D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CatchTheBus.Service</RootNamespace>
-    <AssemblyName>CatchTheBus.Service</AssemblyName>
+    <RootNamespace>CatchTheBus.ConsoleApp</RootNamespace>
+    <AssemblyName>CatchTheBus.ConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,69 +34,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.8.1, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.0.9.8.1\lib\net45\AngleSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NCron, Version=2.3.6107.20965, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NCron.2.3.0\lib\net40-Client\NCron.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\DirectionDescription.cs" />
-    <Compile Include="Constants\DirectionType.cs" />
-    <Compile Include="Installer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Installer.Designer.cs">
-      <DependentUpon>Installer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Models\BusStop.cs" />
-    <Compile Include="Models\Direction.cs" />
-    <Compile Include="Models\TransportListItem.cs" />
-    <Compile Include="Service.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Service.Designer.cs">
-      <DependentUpon>Service.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\UrlBuilder.cs" />
-    <Compile Include="Tasks\TrackScheduleTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="AppSettings.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\CatchTheBus.Service\CatchTheBus.Service.csproj">
+      <Project>{0cae6c00-def6-4e8b-a73b-55648331ac40}</Project>
+      <Name>CatchTheBus.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

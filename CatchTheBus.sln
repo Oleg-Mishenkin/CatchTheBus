@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatchTheBus.Service", "CatchTheBus.Service\CatchTheBus.Service.csproj", "{0CAE6C00-DEF6-4E8B-A73B-55648331AC40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatchTheBus.ConsoleApp", "CatchTheBus.ConsoleApp\CatchTheBus.ConsoleApp.csproj", "{90A4E23A-13E9-4565-885D-B10D8448690D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0CAE6C00-DEF6-4E8B-A73B-55648331AC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CAE6C00-DEF6-4E8B-A73B-55648331AC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CAE6C00-DEF6-4E8B-A73B-55648331AC40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A4E23A-13E9-4565-885D-B10D8448690D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A4E23A-13E9-4565-885D-B10D8448690D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A4E23A-13E9-4565-885D-B10D8448690D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A4E23A-13E9-4565-885D-B10D8448690D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -43,8 +43,7 @@ namespace CatchTheBus.Service
                 Debugger.Launch();
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
                 var schedulingService = new SchedulingService();
-                // schedulingService.At("* * * * *").Run(() => new TrackScheduleTask());
-                new TrackScheduleTask().Execute();
+                schedulingService.At("* * * * *").Run(() => new TrackScheduleTask());
                 schedulingService.Start();
             }
             catch (Exception ex)
