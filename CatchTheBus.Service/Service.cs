@@ -6,6 +6,7 @@ using System.ServiceProcess;
 using CatchTheBus.Service.Tasks;
 using log4net;
 using log4net.Config;
+using Nancy.Hosting.Self;
 using NCron.Fluent.Crontab;
 using NCron.Service;
 
@@ -14,12 +15,13 @@ namespace CatchTheBus.Service
     public partial class Service : ServiceBase
     {
         protected static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+        protected static NancyHost Host;
         static Service()
         {
             // init logging
             var log4netConfig = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
             XmlConfigurator.ConfigureAndWatch(new FileInfo(log4netConfig));
+            Host = new NancyHost(new Uri("http://localhost:8080"));
         }
 
         public Service()
@@ -40,11 +42,11 @@ namespace CatchTheBus.Service
             try
             {
                 Log.Info("Service started");
-                Debugger.Launch();
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
                 var schedulingService = new SchedulingService();
                 schedulingService.At("* * * * *").Run(() => new TrackScheduleTask());
                 schedulingService.Start();
+                Host.Start();
             }
             catch (Exception ex)
             {
@@ -56,11 +58,13 @@ namespace CatchTheBus.Service
         protected override void OnStop()
         {
             Log.Info("Service stopping");
+            Host.Dispose();
         }
 
         private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Log.Fatal(args.ExceptionObject as Exception);
+            Host.Dispose();
         }
     }
 }
