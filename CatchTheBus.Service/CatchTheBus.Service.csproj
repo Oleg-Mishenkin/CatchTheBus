@@ -103,6 +103,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MessageProcessor.cs" />
+    <Compile Include="Services\OutgoingMessagesHelper.cs" />
     <Compile Include="Services\TransportRepositoryService.cs" />
     <Compile Include="Services\UrlBuilder.cs" />
     <Compile Include="Services\UnfinishedCommandsRepository.cs" />
