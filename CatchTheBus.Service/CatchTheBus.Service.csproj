@@ -105,6 +105,7 @@
     <Compile Include="Services\MessageProcessor.cs" />
     <Compile Include="Services\TransportRepositoryService.cs" />
     <Compile Include="Services\UrlBuilder.cs" />
+    <Compile Include="Services\UnfinishedCommandsRepository.cs" />
     <Compile Include="Tasks\TrackScheduleTask.cs" />
   </ItemGroup>
   <ItemGroup>

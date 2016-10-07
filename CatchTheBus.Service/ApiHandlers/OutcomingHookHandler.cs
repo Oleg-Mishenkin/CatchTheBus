@@ -15,10 +15,12 @@ namespace CatchTheBus.Service.ApiHandlers
 			{
 				var msg = JsonConvert.DeserializeObject<MessageFromUserModel>(Request.Body.AsString());
 
-				Console.WriteLine(new MessageProcessor().GetResponse(msg.Text));
+				Console.WriteLine(new MessageProcessor().GetResponse(msg.Text, msg.UserId));
 
 				return HttpStatusCode.OK;
 			};
+
+			Get["/"] = _ => "this is bullshit";
 		}
 	}
 }

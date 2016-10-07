@@ -18,17 +18,30 @@ namespace CatchTheBus.Service.Services
 
 		private string[] Tokenize(string str) => str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-		public string GetResponse(string str)
+		public string GetResponse(string str, string userId)
 		{
 			var tokens = Tokenize(str);
 
 			var command = new ParsedUserCommand();
-			var tokensToParse = Math.Min(tokens.Length, _parsers.Count);
+			var unfinishedCommand = UnfinishedCommandsRepository.Get().GetCommandForUser(userId);
 
-			for (int i = 0; i < tokensToParse; i++)
+			int tokensToParseCount;
+			if (unfinishedCommand != null)
 			{
+				tokensToParseCount = 1; // позволяем довводить только по одной команде. ибо нефиг.
+			}
+			else
+			{
+				tokensToParseCount = Math.Min(tokens.Length, _parsers.Count);
+			}
+
+			// если у нас была незаконченная команда, то мы начинаем не с самого первого парсера
+			for (int i = 0, j = (unfinishedCommand?.LastFilledStep + 1) ?? 0; i < tokensToParseCount; i++, j++)
+			{
+				var isLastToken = i == tokensToParseCount - 1;
+
 				var token = tokens[i];
-				var parser = _parsers[i];
+				var parser = _parsers[j];
 
 				var validationResult = parser.Validate(token);
 				if (!validationResult.IsValid)
@@ -36,10 +49,19 @@ namespace CatchTheBus.Service.Services
 					return validationResult.ErrorMessage;
 				}
 
-				var parsingResult = parser.GetResult(command, token, i == tokensToParse - 1);
-				if (!string.IsNullOrEmpty(parsingResult))
+				var parsingResult = parser.GetResult(command, token, isLastToken);
+				if (isLastToken)
 				{
-					return parsingResult; // уже все попарсили. иначе идем на следующую итерацию
+					if (command.IsCompletelyFilled()) // уже все попарсили. иначе идем на следующую итерацию
+					{
+						UnfinishedCommandsRepository.Get().Remove(userId);
+					}
+					else
+					{
+						UnfinishedCommandsRepository.Get().NewCommandChunk(userId, command, tokensToParseCount);
+					}
+
+					return parsingResult;
 				}
 			}
 
