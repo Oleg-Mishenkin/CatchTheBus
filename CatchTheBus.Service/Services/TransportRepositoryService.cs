@@ -28,12 +28,12 @@ namespace CatchTheBus.Service.Services
 			return GetTransportItems(kind).Select(x => new Tuple<string, string>(x.Number, x.Description)).ToList();
 		}
 
-		public Direction[] GetDirections(TransportKind.Kind kind, string number)
+		public Tuple<Direction, Direction> GetRouteDirections(TransportKind.Kind kind, string number)
 		{
 			var item = GetTransportItems(kind).FirstOrDefault(x => x.Number == number);
 			if (item == null) return null;
 
-			return new[] { item.ForwardDirection, item.BackwardDirection };
+			return new Tuple<Direction, Direction>(item.ForwardDirection, item.BackwardDirection);
 		}
 
 		public List<string> GetStopNames(TransportKind.Kind kind, DirectionType direction, string number)

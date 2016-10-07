@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CatchTheBus.Service.Models
+﻿namespace CatchTheBus.Service.Models
 {
     public class TransportListItem
     {

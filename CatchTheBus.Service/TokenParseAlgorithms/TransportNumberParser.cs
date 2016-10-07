@@ -19,10 +19,14 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
 			parsedCommand.Number = currentToken;
+			if (!isLast) return null;
 
-			var directions = TransportRepositoryService.Instance.GetDirectionList(parsedCommand.TransportKind.Value, parsedCommand.Number);
+			var directions = TransportRepositoryService.Instance.GetRouteDirections(parsedCommand.TransportKind.Value, parsedCommand.Number);
+			var formattedDirections = $"*п* - {directions.Item1.Description ?? "Направление недоступно" }";
+			formattedDirections += "\n";
+			formattedDirections += $"*о* - {directions.Item2.Description ?? "Направление недоступно" }";
 
-			return isLast ? "Список направлений!!!" : null;
+			return formattedDirections;
 		}
 	}
 }
