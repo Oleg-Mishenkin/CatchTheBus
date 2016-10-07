@@ -10,14 +10,14 @@ namespace CatchTheBus.Service.Constants
 
 		public static string Tram = "тв";
 
-		public static string Taxy = "м";
+		public static string Taxi = "м";
 
 		public static string[] All =
 		{
 			Bus,
 			Trolleybus,
 			Tram,
-			Taxy
+			Taxi
 		};
 
 		public enum Kind
@@ -25,7 +25,7 @@ namespace CatchTheBus.Service.Constants
 			Bus,
 			Trolleybus,
 			Tram,
-			Taxy
+			Taxi
 		}
 
 		public static Kind Parse(string str)
@@ -35,7 +35,7 @@ namespace CatchTheBus.Service.Constants
 				case "а": return Kind.Bus;
 				case "тб": return Kind.Trolleybus;
 				case "тв": return Kind.Tram;
-				case "м": return Kind.Taxy;
+				case "м": return Kind.Taxi;
 			}
 
 			throw new InvalidOperationException("Could not find a transport kind with this alias");

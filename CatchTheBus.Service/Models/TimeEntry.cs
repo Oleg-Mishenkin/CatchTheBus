@@ -1,4 +1,6 @@
-﻿namespace CatchTheBus.Service.Models
+﻿using System;
+
+namespace CatchTheBus.Service.Models
 {
 	public class TimeEntry
 	{

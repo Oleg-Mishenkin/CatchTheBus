@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using CatchTheBus.Service.Constants;
 
 namespace CatchTheBus.Service.Services
 {
@@ -19,7 +17,7 @@ namespace CatchTheBus.Service.Services
             return new Uri(GetBaseUrl(), "list.php?vt=1&nl=0");
         }
 
-        public static Uri GetTrolleyBusListUrl()
+        public static Uri GetTrolleybusListUrl()
         {
             return new Uri(GetBaseUrl(), "list.php?vt=2&nl=0");
         }
@@ -33,5 +31,12 @@ namespace CatchTheBus.Service.Services
         {
             return new Uri(GetBaseUrl(), "list.php?vt=4&nl=0");
         }
+
+	    public static Uri GetUriByTransportKind(TransportKind.Kind kind)
+	    {
+			Type type = typeof(UrlBuilder);
+			MethodInfo method = type.GetMethod("Get" + kind + "ListUrl");
+		    return method.Invoke(null, null) as Uri;
+	    }
     }
 }
