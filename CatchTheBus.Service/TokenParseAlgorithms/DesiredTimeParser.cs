@@ -3,7 +3,7 @@ using CatchTheBus.Service.RocketChatModels;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
-	public class DesiredTimeParser : ITokenParseAlgorithm
+	public class DesiredTimeParser : ITokenParser
 	{
 		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{

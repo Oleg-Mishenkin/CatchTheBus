@@ -2,7 +2,7 @@
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
-	public interface ITokenParseAlgorithm
+	public interface ITokenParser
 	{
 		ValidationResult Validate(string str, ParsedUserCommand command);
 

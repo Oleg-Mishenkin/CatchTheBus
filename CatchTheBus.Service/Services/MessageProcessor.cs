@@ -8,7 +8,7 @@ namespace CatchTheBus.Service.Services
 	public class MessageProcessor
 	{
 		// порядок важен
-		private readonly List<ITokenParseAlgorithm> _parsers = new List<ITokenParseAlgorithm>
+		private readonly List<ITokenParser> _parsers = new List<ITokenParser>
 		{
 			new TransportKindParser(),
 			new TransportNumberParser(),

@@ -4,7 +4,7 @@ using CatchTheBus.Service.Services;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
-	public class TransportNumberParser : ITokenParseAlgorithm
+	public class TransportNumberParser : ITokenParser
 	{
 		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
@@ -19,6 +19,9 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
 			parsedCommand.Number = currentToken;
+
+			var directions = TransportRepositoryService.Instance.GetDirectionList(parsedCommand.TransportKind.Value, parsedCommand.Number);
+
 			return isLast ? "Список направлений!!!" : null;
 		}
 	}

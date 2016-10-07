@@ -5,7 +5,7 @@ using CatchTheBus.Service.Services;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
-	public class TransportKindParser : ITokenParseAlgorithm
+	public class TransportKindParser : ITokenParser
 	{
 		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{

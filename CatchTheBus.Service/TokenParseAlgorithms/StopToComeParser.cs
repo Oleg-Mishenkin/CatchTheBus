@@ -2,7 +2,7 @@
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
-	public class StopToComeParser : ITokenParseAlgorithm
+	public class StopToComeParser : ITokenParser
 	{
 		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
