@@ -1,4 +1,5 @@
-﻿using CatchTheBus.Service.Constants;
+﻿using System;
+using CatchTheBus.Service.Constants;
 
 namespace CatchTheBus.Service.RocketChatModels
 {
@@ -9,6 +10,10 @@ namespace CatchTheBus.Service.RocketChatModels
 		public string Number { get; set; }
 
 		public DirectionType? Direction { get; set; }
+
+		public int? StopToCome { get; set; }
+
+		public DateTime? DesiredTime { get; set; }
 
 		public int? NotifyTimeMinutes { get; set; }
 
@@ -25,6 +30,18 @@ namespace CatchTheBus.Service.RocketChatModels
 			if (other.Direction != null)
 			{
 				result.Direction = other.Direction;
+				return result;
+			}
+
+			if (other.DesiredTime != null)
+			{
+				result.DesiredTime = other.DesiredTime;
+				return result;
+			}
+
+			if (other.StopToCome != null)
+			{
+				result.StopToCome = other.StopToCome;
 				return result;
 			}
 

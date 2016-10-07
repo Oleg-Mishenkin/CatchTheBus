@@ -13,7 +13,10 @@ namespace CatchTheBus.Service.Services
 		{
 			new TransportKindParser(),
 			new TransportNumberParser(),
-			new TransportDirectionParser()
+			new DirectionParser(),
+			new DesiredTimeParser(),
+			new StopToComeParser(),
+			new NotifyTimeParser()
 		};
 
 		private string[] Tokenize(string str) => str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -109,11 +112,11 @@ namespace CatchTheBus.Service.Services
 		}
 	}
 
-	public class TransportDirectionParser : ITokenParseAlgorithm
+	public class DirectionParser : ITokenParseAlgorithm
 	{
 		public ValidationResult Validate(string str)
 		{
-			var ok = str == "1" || str == "2";
+			var ok = str == "п" || str == "о" || str == "в";
 			if (!ok) return new ValidationResult { IsValid = false, ErrorMessage = "Некорректное направление" };
 
 			return new ValidationResult { IsValid = true };
@@ -122,7 +125,92 @@ namespace CatchTheBus.Service.Services
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
 			parsedCommand.Number = currentToken;
-			return isLast ? "Список остановок :)" : null;
+			return isLast ? "На какую остановку подойдешь?" : null;
+		}
+	}
+
+	public class StopToComeParser : ITokenParseAlgorithm
+	{
+		public ValidationResult Validate(string str)
+		{
+			int stopNumber;
+			if (!int.TryParse(str, out stopNumber))
+			{
+				return new ValidationResult { IsValid = false, ErrorMessage = "Не найдена остановка с таким номером" };
+			}
+
+			// TODO: провалидировать
+			return new ValidationResult { IsValid = true };
+		}
+
+		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
+		{
+			parsedCommand.StopToCome = int.Parse(currentToken);
+			return isLast ? "Во сколько ты бы хотел сесть на транспорт?" : null;
+		}
+	}
+
+	public class DesiredTimeParser : ITokenParseAlgorithm
+	{
+		public ValidationResult Validate(string str)
+		{
+			var hoursAndMins = str.Split(new[] { ".", ":" }, StringSplitOptions.RemoveEmptyEntries);
+			if (hoursAndMins.Length != 2)
+			{
+				return new ValidationResult { IsValid = true, ErrorMessage = "Введите корректное время" };
+			}
+
+			var hoursString = hoursAndMins[0];
+			var minsString = hoursAndMins[1];
+			int hours, mins;
+
+			if (!int.TryParse(hoursString, out hours) || !int.TryParse(minsString, out mins))
+			{
+				return new ValidationResult { IsValid = true, ErrorMessage = "Введите корректное время" };
+			}
+
+			return new ValidationResult { IsValid = true };
+		}
+
+		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
+		{
+			var hoursAndMins = currentToken.Split(new[] { ".", ":" }, StringSplitOptions.RemoveEmptyEntries);
+			int hours = int.Parse(hoursAndMins[0]), mins = int.Parse(hoursAndMins[1]);
+
+			var dt = DateTime.Now.Date.AddHours(hours).AddMinutes(mins);
+			parsedCommand.DesiredTime = dt;
+
+			return isLast ? "За сколько минут до прибытия транспорта предупредить?" : null;
+		}
+	}
+
+	public class NotifyTimeParser : ITokenParseAlgorithm
+	{
+		public ValidationResult Validate(string str)
+		{
+			int minutes;
+			if (!int.TryParse(str, out minutes))
+			{
+				return new ValidationResult { IsValid = false, ErrorMessage = "Введено некорректное число, повторите" };
+			}
+
+			if (minutes < 0)
+			{
+				return new ValidationResult { IsValid = false, ErrorMessage = "Нельзя вводить отрицательное число минут" };
+			}
+
+			if (minutes > 60)
+			{
+				return new ValidationResult { IsValid = false, ErrorMessage = "Введите число, меньшее 60" };
+			}
+
+			return new ValidationResult { IsValid = true };
+		}
+
+		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
+		{
+			parsedCommand.NotifyTimeMinutes = int.Parse(currentToken);
+			return isLast ? "Зарегистрировано" : null;
 		}
 	}
 }
