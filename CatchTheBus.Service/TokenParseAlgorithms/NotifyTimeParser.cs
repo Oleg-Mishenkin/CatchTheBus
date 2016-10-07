@@ -4,7 +4,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 {
 	public class NotifyTimeParser : ITokenParseAlgorithm
 	{
-		public ValidationResult Validate(string str)
+		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
 			int minutes;
 			if (!int.TryParse(str, out minutes))

@@ -5,7 +5,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 {
 	public class DesiredTimeParser : ITokenParseAlgorithm
 	{
-		public ValidationResult Validate(string str)
+		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
 			var hoursAndMins = str.Split(new[] { ".", ":" }, StringSplitOptions.RemoveEmptyEntries);
 			if (hoursAndMins.Length != 2)

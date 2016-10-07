@@ -4,7 +4,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 {
 	public class DirectionParser : ITokenParseAlgorithm
 	{
-		public ValidationResult Validate(string str)
+		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
 			var ok = str == "п" || str == "о" || str == "в";
 			if (!ok) return new ValidationResult { IsValid = false, ErrorMessage = "Некорректное направление" };

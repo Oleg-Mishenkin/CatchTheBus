@@ -4,7 +4,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 {
 	public class StopToComeParser : ITokenParseAlgorithm
 	{
-		public ValidationResult Validate(string str)
+		public ValidationResult Validate(string str, ParsedUserCommand command)
 		{
 			int stopNumber;
 			if (!int.TryParse(str, out stopNumber))

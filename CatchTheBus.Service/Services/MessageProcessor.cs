@@ -24,8 +24,8 @@ namespace CatchTheBus.Service.Services
 		{
 			var tokens = Tokenize(str);
 
-			var command = new ParsedUserCommand();
 			var unfinishedCommand = UnfinishedCommandsRepository.Get().GetCommandForUser(userId);
+			var command = unfinishedCommand?.Command ?? new ParsedUserCommand();
 
 			int tokensToParseCount;
 			if (unfinishedCommand != null)
@@ -45,7 +45,7 @@ namespace CatchTheBus.Service.Services
 				var token = tokens[i];
 				var parser = _parsers[j];
 
-				var validationResult = parser.Validate(token);
+				var validationResult = parser.Validate(token, command);
 				if (!validationResult.IsValid)
 				{
 					return validationResult.ErrorMessage;

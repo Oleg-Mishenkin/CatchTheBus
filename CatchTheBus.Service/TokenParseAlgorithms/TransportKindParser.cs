@@ -7,10 +7,12 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 {
 	public class TransportKindParser : ITokenParseAlgorithm
 	{
-		public ValidationResult Validate(string str) =>
-					TransportKind.All.Contains(str)
-						? new ValidationResult { IsValid = true }
-						: new ValidationResult { IsValid = false, ErrorMessage = "Некорректный вид транспорта" };
+		public ValidationResult Validate(string str, ParsedUserCommand command)
+		{
+			return TransportKind.All.Contains(str)
+				? new ValidationResult { IsValid = true }
+				: new ValidationResult { IsValid = false, ErrorMessage = "Некорректный вид транспорта" };
+		}
 
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
