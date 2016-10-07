@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Models\BusStop.cs" />
     <Compile Include="Models\Direction.cs" />
+    <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Models\TransportListItem.cs" />
     <Compile Include="RocketChatModels\MessageFromBot.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MessageProcessor.cs" />
     <Compile Include="Services\OutgoingMessagesHelper.cs" />
+    <Compile Include="Services\SubscriptionService.cs" />
     <Compile Include="Services\TransportRepositoryService.cs" />
     <Compile Include="Services\UrlBuilder.cs" />
     <Compile Include="Services\UnfinishedCommandsRepository.cs" />

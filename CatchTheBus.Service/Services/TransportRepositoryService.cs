@@ -13,6 +13,8 @@ namespace CatchTheBus.Service.Services
 
 		private TransportRepositoryService() { }
 
+		private static readonly TransportRepositoryService instance = new TransportRepositoryService();
+
 		public static TransportRepositoryService Instance
 		{
 			get
@@ -62,8 +64,6 @@ namespace CatchTheBus.Service.Services
 				return stop.Value;
 			}
 		}
-
-		private static readonly TransportRepositoryService instance = new TransportRepositoryService();
 		
 		public Dictionary<DirectionType, string> GetDirectionList(TransportKind.Kind kind, string number)
 		{

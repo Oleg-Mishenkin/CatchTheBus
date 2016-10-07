@@ -92,7 +92,6 @@ namespace CatchTheBus.Service.Tasks
 		    {
 			    var itemAddr = new Uri(address, item.Url);
 			    var itemDocument = BrowsingContext.New(config).OpenAsync(itemAddr.AbsoluteUri).Result;
-			    var itemTrSelector = "tr";
 			    bool? found = null;
 			    foreach (var innerTr in itemDocument.QuerySelectorAll("table tr"))
 			    {
