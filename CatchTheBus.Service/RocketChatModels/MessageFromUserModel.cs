@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CatchTheBus.ConsoleApp.Models
+namespace CatchTheBus.Service.RocketChatModels
 {
 	public class MessageFromUserModel
 	{

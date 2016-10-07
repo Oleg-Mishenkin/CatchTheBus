@@ -1,6 +1,6 @@
-﻿using CatchTheBus.ConsoleApp.Constants;
+﻿using CatchTheBus.Service.Constants;
 
-namespace CatchTheBus.ConsoleApp.Models
+namespace CatchTheBus.Service.RocketChatModels
 {
 	public class ParsedUserCommand
 	{
@@ -8,7 +8,7 @@ namespace CatchTheBus.ConsoleApp.Models
 
 		public string Number { get; set; }
 
-		public string Direction { get; set; }
+		public DirectionType Direction { get; set; }
 
 		public int NotifyTimeMinutes { get; set; }
 	}

@@ -60,13 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\Direction.cs" />
-    <Compile Include="Constants\TransportKind.cs" />
-    <Compile Include="MessageProcessor.cs" />
-    <Compile Include="Models\MessageFromBot.cs" />
-    <Compile Include="Models\MessageFromUserModel.cs" />
-    <Compile Include="Models\ParsedUserCommand.cs" />
-    <Compile Include="OutcomingHookHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,10 +1,11 @@
 ﻿using System;
-using CatchTheBus.ConsoleApp.Models;
+using CatchTheBus.Service.RocketChatModels;
+using CatchTheBus.Service.Services;
 using Nancy;
 using Nancy.Extensions;
 using Newtonsoft.Json;
 
-namespace CatchTheBus.ConsoleApp
+namespace CatchTheBus.Service.ApiHandlers
 {
 	public class OutcomingHookHandler : NancyModule
 	{

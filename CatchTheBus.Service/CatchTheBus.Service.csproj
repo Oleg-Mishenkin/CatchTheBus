@@ -58,6 +58,10 @@
       <HintPath>..\packages\NCron.2.3.0\lib\net40-Client\NCron.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -72,9 +76,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiHandlers\OutcomingHookHandler.cs" />
     <Compile Include="ApiModules\NancyTestModule.cs" />
     <Compile Include="Constants\DirectionDescription.cs" />
     <Compile Include="Constants\DirectionType.cs" />
+    <Compile Include="Constants\TransportKind.cs" />
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,6 +91,9 @@
     <Compile Include="Models\Direction.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Models\TransportListItem.cs" />
+    <Compile Include="RocketChatModels\MessageFromBot.cs" />
+    <Compile Include="RocketChatModels\MessageFromUserModel.cs" />
+    <Compile Include="RocketChatModels\ParsedUserCommand.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,6 +102,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MessageProcessor.cs" />
+    <Compile Include="Services\TransportRepositoryService.cs" />
     <Compile Include="Services\UrlBuilder.cs" />
     <Compile Include="Tasks\TrackScheduleTask.cs" />
   </ItemGroup>

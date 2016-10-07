@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CatchTheBus.ConsoleApp.Constants
+namespace CatchTheBus.Service.Constants
 {
 	public static class TransportKind
 	{

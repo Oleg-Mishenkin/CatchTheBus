@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CatchTheBus.ConsoleApp.Constants;
-using CatchTheBus.ConsoleApp.Models;
+using CatchTheBus.Service.Constants;
+using CatchTheBus.Service.RocketChatModels;
 
-namespace CatchTheBus.ConsoleApp
+namespace CatchTheBus.Service.Services
 {
 	public class MessageProcessor
 	{
