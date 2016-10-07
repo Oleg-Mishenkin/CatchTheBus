@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CatchTheBus.Service.Constants;
@@ -20,9 +21,9 @@ namespace CatchTheBus.Service.Services
 			}
 		}
 
-		public List<string> GetTransportKindNumbers(TransportKind.Kind kind)
+		public List<Tuple<string, string>> GetTransportKindNumbers(TransportKind.Kind kind)
 		{
-			return GetTransportItems(kind).Select(x => x.Number).ToList();
+			return GetTransportItems(kind).Select(x => new Tuple<string, string>(x.Number, x.Description)).ToList();
 		}
 
 		public Direction[] GetDirections(TransportKind.Kind kind, string number)

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.RocketChatModels;
+using CatchTheBus.Service.Services;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
@@ -14,7 +15,14 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
 			parsedCommand.TransportKind = TransportKind.Parse(currentToken);
-			return isLast ? "Список маршрутов - тут" : null;
+
+			var numbers = TransportRepositoryService.Instance.GetTransportKindNumbers(parsedCommand.TransportKind.Value);
+			var formattedNumbers = string.Join("\n", numbers.Select((item, i) => $"*{item.Item1}* - {item.Item2}"));
+
+			return isLast 
+					? formattedNumbers + "\n\n" +
+								$"Какой {TransportKind.GetKindLocalizedName(parsedCommand.TransportKind.Value)} нужен?"
+					: null;
 		}
 	}
 }

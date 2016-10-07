@@ -40,5 +40,22 @@ namespace CatchTheBus.Service.Constants
 
 			throw new InvalidOperationException("Could not find a transport kind with this alias");
 		}
+
+		public static string GetKindLocalizedName(Kind kind)
+		{
+			switch (kind)
+			{
+				case Kind.Bus:
+					return "автобус";
+				case Kind.Trolleybus:
+					return "троллейбус";
+				case Kind.Tram:
+					return "трамвай";
+				case Kind.Taxi:
+					return "маршрутное такси";
+			}
+
+			return string.Empty;
+		}
 	}
 }

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Configuration;
-using System.Net;
-using CatchTheBus.Service.RocketChatModels;
+using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Services;
+using CatchTheBus.Service.Tasks;
 using Nancy.Hosting.Self;
-using Newtonsoft.Json;
 
 namespace CatchTheBus.ConsoleApp
 {
@@ -12,9 +10,9 @@ namespace CatchTheBus.ConsoleApp
     {
         static void Main(string[] args)
         {
-			// new TrackScheduleTask().Execute();
+			new TrackScheduleTask(TransportKind.Kind.Tram).Execute();
 
-			using (var client = new WebClient())
+			/*using (var client = new WebClient())
 			{
 				var url = ConfigurationManager.AppSettings["IncomingWebhookUrl"];
 
@@ -27,7 +25,7 @@ namespace CatchTheBus.ConsoleApp
 
 				client.Headers["Content-Type"] = "application/json";
 				client.UploadStringAsync(new Uri(url), JsonConvert.SerializeObject(asdf));
-			}
+			}*/
 
 			using (var host = new NancyHost(new Uri("http://localhost:8080")))
 			{
