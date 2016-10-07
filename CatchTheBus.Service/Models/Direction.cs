@@ -9,6 +9,6 @@ namespace CatchTheBus.Service.Models
 
         public string Description { get; set; }
 
-        public List<BusStop> BusStops { get; set; } 
+        public Dictionary<string, List<TimeEntry>> BusStops { get; set; } 
     }
 }
