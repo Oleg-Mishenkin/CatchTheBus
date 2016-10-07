@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatchTheBus.Service.Tasks;
+using Nancy.Hosting.Self;
 
 namespace CatchTheBus.ConsoleApp
 {
@@ -11,7 +7,14 @@ namespace CatchTheBus.ConsoleApp
     {
         static void Main(string[] args)
         {
-            new TrackScheduleTask().Execute();
-        }
+			// new TrackScheduleTask().Execute();
+
+			using (var host = new NancyHost(new Uri("http://localhost:8080")))
+			{
+				host.Start();
+				Console.WriteLine("Running on http://localhost:8080");
+				Console.ReadLine();
+			}
+		}
     }
 }
