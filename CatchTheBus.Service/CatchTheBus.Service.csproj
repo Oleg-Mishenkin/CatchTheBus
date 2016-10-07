@@ -109,6 +109,7 @@
     <Compile Include="Services\TransportRepositoryService.cs" />
     <Compile Include="Services\UrlBuilder.cs" />
     <Compile Include="Services\UnfinishedCommandsRepository.cs" />
+    <Compile Include="Tasks\ProcessSubscriptionsTask.cs" />
     <Compile Include="Tasks\TrackScheduleTask.cs" />
     <Compile Include="TokenParseAlgorithms\DesiredTimeParser.cs" />
     <Compile Include="TokenParseAlgorithms\DirectionParser.cs" />

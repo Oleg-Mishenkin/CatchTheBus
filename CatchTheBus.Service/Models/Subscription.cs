@@ -12,6 +12,8 @@ namespace CatchTheBus.Service.Models
 
 		public TransportKind.Kind Kind { get; set; }
 
+		public DirectionType Direction { get; set; }
+
 		public string Number { get; set; }
 
 		public string StopName { get; set; }

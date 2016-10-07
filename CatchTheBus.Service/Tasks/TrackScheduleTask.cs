@@ -24,7 +24,7 @@ namespace CatchTheBus.Service.Tasks
 
 		public override void Execute()
         {
-            Logger.Info("Start executing TrackScheduleTask");
+            Logger.Info("Start executing " + nameof(TrackScheduleTask));
             try
             {
 				var config = Configuration.Default.WithDefaultLoader();

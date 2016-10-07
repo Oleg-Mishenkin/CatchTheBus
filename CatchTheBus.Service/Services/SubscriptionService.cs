@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using CatchTheBus.Service.Models;
 
 namespace CatchTheBus.Service.Services
@@ -23,6 +24,17 @@ namespace CatchTheBus.Service.Services
 		public List<Subscription> GetUserSubscriptions(string userName)
 		{
 			return _subscriptions.GetOrAdd(userName, new List<Subscription>());
+		}
+
+		public List<string> GetAllUsers()
+		{
+			return _subscriptions.Keys.ToList();
+		}
+
+		public void RemoveSubscription(string userName, Subscription subscription)
+		{
+			var subscriptions = GetUserSubscriptions(userName);
+			subscriptions.Remove(subscription);
 		}
 
 		public void SaveUserSubscription(string userName, Subscription item)
