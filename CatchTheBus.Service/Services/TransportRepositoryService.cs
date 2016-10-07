@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Models;
 
@@ -8,13 +9,6 @@ namespace CatchTheBus.Service.Services
 	public sealed class TransportRepositoryService
 	{
 		private readonly ConcurrentDictionary<TransportKind.Kind, List<TransportListItem>> _savedItems = new ConcurrentDictionary<TransportKind.Kind, List<TransportListItem>>();
-
-		public List<string> GetTransportKindNumbers(TransportKind.Kind kind)
-		{
-			return new List<string> { "44m", "42"};
-		}
-
-		private static readonly TransportRepositoryService instance = new TransportRepositoryService();
 
 		private TransportRepositoryService() { }
 
@@ -26,6 +20,50 @@ namespace CatchTheBus.Service.Services
 			}
 		}
 
+		public List<string> GetTransportKindNumbers(TransportKind.Kind kind)
+		{
+			return GetTransportItems(kind).Select(x => x.Number).ToList();
+		}
+
+		public Direction[] GetDirections(TransportKind.Kind kind, string number)
+		{
+			var item = GetTransportItems(kind).FirstOrDefault(x => x.Number == number);
+			if (item == null) return null;
+
+			return new[] { item.ForwardDirection, item.BackwardDirection };
+		}
+
+		public List<string> GetStopNames(TransportKind.Kind kind, DirectionType direction, string number)
+		{
+			var item = GetTransportItems(kind).FirstOrDefault(x => x.Number == number);
+			if (item == null) return null;
+
+			if (direction == DirectionType.Backward)
+				return item.BackwardDirection.BusStops.Select(x => x.Key).ToList();
+			return item.ForwardDirection.BusStops.Select(x => x.Key).ToList();
+		}
+
+		public List<TimeEntry> GetTimeEntries(TransportKind.Kind kind, DirectionType direction, string number, string busStop)
+		{
+			var item = GetTransportItems(kind).FirstOrDefault(x => x.Number == number);
+			if (item == null) return null;
+
+			if (direction == DirectionType.Backward)
+			{
+				var stop = item.BackwardDirection.BusStops.FirstOrDefault(x => x.Key.ToLower().StartsWith(busStop.ToLower()));
+				if (stop.Equals(default(KeyValuePair<string, List<TimeEntry>>))) return null;
+				return stop.Value;
+			}
+			else
+			{
+				var stop = item.ForwardDirection.BusStops.FirstOrDefault(x => x.Key.ToLower().StartsWith(busStop.ToLower()));
+				if (stop.Equals(default(KeyValuePair<string, List<TimeEntry>>))) return null;
+				return stop.Value;
+			}
+		}
+
+		private static readonly TransportRepositoryService instance = new TransportRepositoryService();
+		
 		public Dictionary<DirectionType, string> GetDirectionList(TransportKind.Kind kind, string number)
 		{
 			return new Dictionary<DirectionType, string>
