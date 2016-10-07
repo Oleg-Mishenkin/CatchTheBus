@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
+using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Tasks;
 using log4net;
 using log4net.Config;
@@ -44,7 +45,10 @@ namespace CatchTheBus.Service
                 Log.Info("Service started");
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
                 var schedulingService = new SchedulingService();
-                schedulingService.At("* * * * *").Run(() => new TrackScheduleTask());
+                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Bus));
+                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Taxi));
+                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Tram));
+                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Trolleybus));
                 schedulingService.Start();
                 Host.Start();
             }
