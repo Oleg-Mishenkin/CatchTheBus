@@ -54,7 +54,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		public string GetMessageAfter(ParsedUserCommand command, string token)
 		{
 			return $"Хорошо. Я сообщу о том, что {TransportKind.GetKindLocalizedName(command.TransportKind.Value)} " +
-			       $"номер *{command.Number}* будет на остановке *{command.StopToCome}* за *{command.NotifyTimeMinutes}* минут";
+			       $"номер *{command.Number}* будет на остановке *{command.StopToCome}*, за *{command.NotifyTimeMinutes}* минут";
 		}
 	}
 }
