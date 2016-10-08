@@ -13,8 +13,8 @@ namespace CatchTheBus.Service.Services
 			new TransportKindParser(),
 			new TransportNumberParser(),
 			new DirectionParser(),
-			new DesiredTimeParser(),
 			new StopToComeParser(),
+			new DesiredTimeParser(),
 			new NotifyTimeParser()
 		};
 
@@ -60,7 +60,7 @@ namespace CatchTheBus.Service.Services
 					}
 					else
 					{
-						UnfinishedCommandsRepository.Get().NewCommandChunk(userId, command, tokensToParseCount);
+						UnfinishedCommandsRepository.Get().UpdateCommand(userId, command, tokensToParseCount);
 					}
 
 					return parsingResult;

@@ -36,7 +36,7 @@ namespace CatchTheBus.Service.Services
 			return new Tuple<Direction, Direction>(item.ForwardDirection, item.BackwardDirection);
 		}
 
-		public List<string> GetStopNames(TransportKind.Kind kind, DirectionType direction, string number)
+		public List<string> GetStopNames(TransportKind.Kind kind, string number, DirectionType direction)
 		{
 			var item = GetTransportItems(kind).FirstOrDefault(x => x.Number == number);
 			if (item == null) return null;

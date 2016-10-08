@@ -11,7 +11,7 @@ namespace CatchTheBus.Service.RocketChatModels
 
 		public DirectionType? Direction { get; set; }
 
-		public int? StopToCome { get; set; }
+		public string StopToCome { get; set; }
 
 		public DateTime? DesiredTime { get; set; }
 

@@ -22,13 +22,19 @@ namespace CatchTheBus.Service.Services
 
 		public void SendMessage(string text, string destination)
 		{
+			var to = destination;
+			if (!to.StartsWith("@") && !to.StartsWith("#"))
+			{
+				to = "@" + to;
+			}
+
 			using (var client = new WebClient())
 			{
 				var url = ConfigurationManager.AppSettings["IncomingWebhookUrl"];
 
 				var messageModel = new MessageFromBot
 				{
-					To = destination,
+					To = to,
 					Text = text,
 					IconUrl = ConfigurationManager.AppSettings["Icon"]
 				};

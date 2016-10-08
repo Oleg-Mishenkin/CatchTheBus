@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Models;
 using CatchTheBus.Service.Services;
 using log4net;
@@ -45,7 +46,24 @@ namespace CatchTheBus.Service.Tasks
 
 			var timeEntries = transportService.GetTimeEntries(subscription.Kind, subscription.Direction, subscription.Number, subscription.StopName).Where(x => x.Hours > targetTime.Hours || (x.Hours == targetTime.Hours && x.Minutes == targetTime.Minutes)).OrderBy(x => x.Hours).ThenBy(x => x.Minutes);
 
+			var text =
+				$"{TransportKind.GetKindLocalizedName(subscription.Kind).FirstCharToUpper()} номер {subscription.Number} будет на остановке {subscription.StopName} в ";
+			text += string.Join("\n", timeEntries.Select(x => $"{x.Hours}:{x.Minutes}").ToArray());
+
+			OutgoingMessagesHelper.Get().SendMessage(text, userName);
+
 			return true;
+		}
+
+	}
+
+	public static class StringEx
+	{
+		public static string FirstCharToUpper(this string input)
+		{
+			if (string.IsNullOrEmpty(input))
+				throw new ArgumentException("Fail");
+			return input.First().ToString().ToUpper() + input.Substring(1);
 		}
 	}
 }

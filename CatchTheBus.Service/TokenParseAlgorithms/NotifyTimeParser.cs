@@ -19,7 +19,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 
 			if (minutes > 60)
 			{
-				return new ValidationResult { IsValid = false, ErrorMessage = "Введите число, меньшее 60" };
+				return new ValidationResult { IsValid = false, ErrorMessage = "Введите целое число от 1 до 60" };
 			}
 
 			return new ValidationResult { IsValid = true };

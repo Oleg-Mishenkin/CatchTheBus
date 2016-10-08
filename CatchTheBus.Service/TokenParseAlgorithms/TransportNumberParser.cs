@@ -22,7 +22,8 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			if (!isLast) return null;
 
 			var directions = TransportRepositoryService.Instance.GetRouteDirections(parsedCommand.TransportKind.Value, parsedCommand.Number);
-			var formattedDirections = $"*п* - {directions.Item1.Description ?? "Направление недоступно" }";
+			var formattedDirections = "Выберите направление маршрута:\n\n";
+			formattedDirections += $"*п* - {directions.Item1.Description ?? "Направление недоступно" }";
 			formattedDirections += "\n";
 			formattedDirections += $"*о* - {directions.Item2.Description ?? "Направление недоступно" }";
 

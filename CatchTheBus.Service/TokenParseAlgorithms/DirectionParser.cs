@@ -1,4 +1,6 @@
-﻿using CatchTheBus.Service.RocketChatModels;
+﻿using CatchTheBus.Service.Constants;
+using CatchTheBus.Service.RocketChatModels;
+using CatchTheBus.Service.Services;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
@@ -14,8 +16,15 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
-			parsedCommand.Number = currentToken;
-			return isLast ? "На какую остановку подойдешь?" : null;
+			parsedCommand.Direction = currentToken == "п" ? DirectionType.Forward : DirectionType.Backward;
+			string formattedStops = "Выберите остановку (введите начало названия в любом регистре)\n\n";
+
+			var stops = TransportRepositoryService.Instance.GetStopNames(parsedCommand.TransportKind.Value,
+				parsedCommand.Number, parsedCommand.Direction.Value);
+
+			formattedStops += string.Join("\n", stops);
+
+			return isLast ? formattedStops + "\n\n" + "На какую остановку подойдешь?" : null;
 		}
 	}
 }

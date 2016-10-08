@@ -34,6 +34,25 @@ namespace CatchTheBus.Service.Services
 			return c.Command;
 		}
 
+		public ParsedUserCommand UpdateCommand(string userId, ParsedUserCommand commandChunk, int newTokensCount)
+		{
+			var c = _usersCommands.ContainsKey(userId) ? _usersCommands[userId] : new UnfinishedCommand();
+
+			if (c.Command != null)
+			{
+				c.LastFilledStep += 1;
+			}
+			else
+			{
+				c.LastFilledStep += (newTokensCount - 1);
+			}
+
+			c.Command = commandChunk;
+			_usersCommands[userId] = c;
+
+			return c.Command;
+		}
+
 		public void Remove(string userId)
 		{
 			if (!_usersCommands.ContainsKey(userId))
