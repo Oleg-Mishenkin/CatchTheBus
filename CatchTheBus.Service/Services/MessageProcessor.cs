@@ -22,6 +22,9 @@ namespace CatchTheBus.Service.Services
 
 		public string GetResponse(string str, string userId, string userName)
 		{
+			var result = ProcessSpecialMessages(str, userId);
+			if (result != null) return result; // если это было специальное сообщение
+
 			var tokens = Tokenize(str);
 
 			var unfinishedCommand = UnfinishedCommandsRepository.Get().GetCommandForUser(userId);
@@ -68,6 +71,29 @@ namespace CatchTheBus.Service.Services
 			}
 
 			return "Какая жалость! Не удалось разобрать команду.";
+		}
+
+		private string ProcessSpecialMessages(string input, string userId)
+		{
+			var inputLower = input.ToLower();
+			if (inputLower == "h" || input == "help" || input == "помощь")
+			{
+				return "Здесь будет подсказка";
+			}
+
+			if (inputLower == "сброс")
+			{
+				if (UnfinishedCommandsRepository.Get().Remove(userId))
+				{
+					return "Ваши подписки на транспорт удалены";
+				}
+				else
+				{
+					return "У вас нет подписок на транспорт";
+				}
+			}
+
+			return null;
 		}
 	}
 }

@@ -53,14 +53,14 @@ namespace CatchTheBus.Service.Services
 			return c.Command;
 		}
 
-		public void Remove(string userId)
+		public bool Remove(string userId)
 		{
 			if (!_usersCommands.ContainsKey(userId))
 			{
-				throw new InvalidOperationException("Cannot find a user with id " + userId);
+				return false;
 			}
 
-			_usersCommands.Remove(userId);
+			return _usersCommands.Remove(userId);
 		}
 
 		public UnfinishedCommand GetCommandForUser(string userId)
