@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CatchTheBus.Service.RocketChatModels;
 
 namespace CatchTheBus.Service.Services
@@ -12,45 +11,13 @@ namespace CatchTheBus.Service.Services
 
 		public static UnfinishedCommandsRepository Get() => _instance ?? (_instance = new UnfinishedCommandsRepository());
 
-		private readonly Dictionary<string, UnfinishedCommand> _usersCommands 
-			= new Dictionary<string, UnfinishedCommand>();  // UserId => command
+		private readonly Dictionary<string, ParsedUserCommand> _usersCommands 
+			= new Dictionary<string, ParsedUserCommand>();  // UserId => command
 
-		public ParsedUserCommand NewCommandChunk(string userId, ParsedUserCommand commandChunk, int newTokensCount)
+		public ParsedUserCommand UpdateCommand(string userId, ParsedUserCommand command)
 		{
-			var c = _usersCommands.ContainsKey(userId) ? _usersCommands[userId] : new UnfinishedCommand();
-			if (c.Command != null)
-			{
-				c.Command = c.Command.MergeWith(commandChunk);
-				c.LastFilledStep++; // позволяем вводить только один чанк в незавершенную команду, поэтому ++
-			}
-			else
-			{
-				c.Command = commandChunk;
-				c.LastFilledStep += (newTokensCount - 1);
-			}
-
-			_usersCommands[userId] = c;
-
-			return c.Command;
-		}
-
-		public ParsedUserCommand UpdateCommand(string userId, ParsedUserCommand commandChunk, int newTokensCount)
-		{
-			var c = _usersCommands.ContainsKey(userId) ? _usersCommands[userId] : new UnfinishedCommand();
-
-			if (c.Command != null)
-			{
-				c.LastFilledStep += 1;
-			}
-			else
-			{
-				c.LastFilledStep += (newTokensCount - 1);
-			}
-
-			c.Command = commandChunk;
-			_usersCommands[userId] = c;
-
-			return c.Command;
+			_usersCommands[userId] = command;
+			return command;
 		}
 
 		public bool Remove(string userId)
@@ -63,7 +30,7 @@ namespace CatchTheBus.Service.Services
 			return _usersCommands.Remove(userId);
 		}
 
-		public UnfinishedCommand GetCommandForUser(string userId)
+		public ParsedUserCommand GetCommandForUser(string userId)
 		{
 			if (!_usersCommands.ContainsKey(userId))
 			{
@@ -71,13 +38,6 @@ namespace CatchTheBus.Service.Services
 			}
 
 			return _usersCommands[userId];
-		}
-
-		public class UnfinishedCommand
-		{
-			public ParsedUserCommand Command { get; set; }
-
-			public int LastFilledStep { get; set; }
 		}
 	}
 }
