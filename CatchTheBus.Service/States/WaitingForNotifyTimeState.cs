@@ -3,11 +3,11 @@ using CatchTheBus.Service.Models;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	public class WaitingForNotifyTimeState : IState
+	public class WaitingForNotifyTimeState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			int minutes;
 			if (!int.TryParse(token, out minutes))
@@ -28,7 +28,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new ValidationResult { IsValid = true };
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			command.NotifyTimeMinutes = int.Parse(currentToken);
 
@@ -48,12 +48,12 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new SubscriptionAddedState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token) 
+		public override string GetMessageBefore(ParsedUserCommand command, string token) 
 			=> "За сколько минут до прибытия транспорта предупредить?";
 
-		public string GetMessageAfter(ParsedUserCommand command, string token)
+		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
-			return $"Хорошо. Я сообщу о том, что {TransportKind.GetKindLocalizedName(command.TransportKind.Value)} " +
+			return $"Хорошо. Я начну оповещать о том, что {TransportKind.GetKindLocalizedName(command.TransportKind.Value)} " +
 			       $"номер *{command.Number}* будет на остановке *{command.StopToCome}*, за *{command.NotifyTimeMinutes}* минут";
 		}
 	}

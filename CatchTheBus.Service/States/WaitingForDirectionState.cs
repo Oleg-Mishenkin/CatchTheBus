@@ -2,11 +2,24 @@
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	public class WaitingForDirectionState : IState
+	public class WaitingForDirectionState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult CanExecute(string token, ParsedUserCommand command)
+		{
+			var directions = TransportRepositoryService.Instance.GetRouteDirections(command.TransportKind.Value, command.Number);
+			if (directions.Item1.Description == null || directions.Item2.Description == null)
+				return new ValidationResult
+				{
+					IsValid = false,
+					ErrorMessage = "На данный момент по Вашему запросу нет доступного транспорта"
+				};
+
+			return base.CanExecute(token, command);
+		}
+
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			var ok = token == "п" || token == "о" || token == "в";
 			if (!ok) return new ValidationResult { IsValid = false, ErrorMessage = "Некорректное направление" };
@@ -14,13 +27,13 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new ValidationResult { IsValid = true };
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			command.Direction = currentToken == "п" ? DirectionType.Forward : DirectionType.Backward;
 			return new WaitingForStopNameState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token)
+		public override string GetMessageBefore(ParsedUserCommand command, string token)
 		{
 			var directions = TransportRepositoryService.Instance.GetRouteDirections(command.TransportKind.Value, command.Number);
 			var formattedDirections = "Выберите направление маршрута:\n\n";
@@ -31,7 +44,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return formattedDirections;
 		}
 
-		public string GetMessageAfter(ParsedUserCommand command, string token)
+		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
 			var formattedDirection = command.Direction == DirectionType.Forward ? "прямое" : "обратное";
 			return $"Выбрано {formattedDirection} направление";

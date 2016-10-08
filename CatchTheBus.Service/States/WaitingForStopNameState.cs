@@ -3,11 +3,11 @@ using System.Linq;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	public class WaitingForStopNameState : IState
+	public class WaitingForStopNameState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			var stops = TransportRepositoryService.Instance.GetStopNames(command.TransportKind.Value, command.Number, command.Direction.Value);
 
@@ -19,14 +19,14 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new ValidationResult { IsValid = true };
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			var stops = TransportRepositoryService.Instance.GetStopNames(command.TransportKind.Value, command.Number, command.Direction.Value);
 			command.StopToCome = stops.First(x => x.StartsWith(currentToken, StringComparison.InvariantCultureIgnoreCase));
 			return new WaitingForDesiredTimeState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token)
+		public override string GetMessageBefore(ParsedUserCommand command, string token)
 		{
 			string formattedStops = "Выберите остановку (введите начало названия в любом регистре)\n\n";
 
@@ -37,7 +37,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return formattedStops + "\n\n" + "На какую остановку подойдешь?";
 		}
 
-		public string GetMessageAfter(ParsedUserCommand command, string token)
+		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
 			return $"Выбранная остановка - {command.StopToCome}";
 		}

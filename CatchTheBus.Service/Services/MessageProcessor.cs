@@ -1,7 +1,7 @@
 ﻿using System;
 using CatchTheBus.Service.Helpers;
 using CatchTheBus.Service.RocketChatModels;
-using CatchTheBus.Service.TokenParseAlgorithms;
+using CatchTheBus.Service.States;
 
 namespace CatchTheBus.Service.Services
 {
@@ -70,6 +70,15 @@ namespace CatchTheBus.Service.Services
 				}
 
 				command.CurrentState = newState;
+
+
+				var canExecuteResult = command.CurrentState.CanExecute(token, command);
+				if (!canExecuteResult.IsValid)
+				{
+					UnfinishedCommandsRepository.Get().Remove(userId);
+					OutgoingMessagesHelper.Get().SendMessage(canExecuteResult.ErrorMessage, userName);
+					return;
+				}
 
 				// отправляем приветствие для новой команды
 				var messageBefore = command.CurrentState.GetMessageBefore(command, token);

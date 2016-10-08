@@ -77,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiHandlers\OutcomingHookHandler.cs" />
-    <Compile Include="ApiModules\NancyTestModule.cs" />
     <Compile Include="Constants\DirectionDescription.cs" />
     <Compile Include="Constants\DirectionType.cs" />
     <Compile Include="Constants\TransportKind.cs" />
@@ -114,15 +113,15 @@
     <Compile Include="Tasks\OT76\TrackOT76ScheduleTask.cs" />
     <Compile Include="Tasks\Yargortrans\YargortransStopsFillTask.cs" />
     <Compile Include="Tasks\Yargortrans\YargortransUrlBuilder.cs" />
-    <Compile Include="TokenParseAlgorithms\IState.cs" />
-    <Compile Include="TokenParseAlgorithms\SubscriptionAddedState.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForDesiredTimeState.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForDirectionState.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForKindState.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForNotifyTimeState.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForNumberState.cs" />
-    <Compile Include="TokenParseAlgorithms\ValidationResult.cs" />
-    <Compile Include="TokenParseAlgorithms\WaitingForStopNameState.cs" />
+    <Compile Include="States\AbstractState.cs" />
+    <Compile Include="States\SubscriptionAddedState.cs" />
+    <Compile Include="States\WaitingForDesiredTimeState.cs" />
+    <Compile Include="States\WaitingForDirectionState.cs" />
+    <Compile Include="States\WaitingForKindState.cs" />
+    <Compile Include="States\WaitingForNotifyTimeState.cs" />
+    <Compile Include="States\WaitingForNumberState.cs" />
+    <Compile Include="States\ValidationResult.cs" />
+    <Compile Include="States\WaitingForStopNameState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

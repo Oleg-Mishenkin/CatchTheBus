@@ -3,11 +3,11 @@ using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	class WaitingForNumberState : IState
+	class WaitingForNumberState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			if (!TransportRepositoryService.Instance.GetTransportKindNumbers(command.TransportKind.Value).Any(x => x.Item1 == token))
 			{
@@ -17,13 +17,13 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new ValidationResult { IsValid = true };
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			command.Number = currentToken;
 			return new WaitingForDirectionState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token)
+		public override string GetMessageBefore(ParsedUserCommand command, string token)
 		{
 			var numbers = TransportRepositoryService.Instance.GetTransportKindNumbers(command.TransportKind.Value);
 			var formattedNumbers = string.Join("\n", numbers.Select((item, i) => $"*{item.Item1}* - {item.Item2}"));
@@ -32,7 +32,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			       $"Выберите {TransportKind.GetKindLocalizedName(command.TransportKind.Value)}";
 		}
 
-		public string GetMessageAfter(ParsedUserCommand command, string token)
+		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
 			return $"Выбран номер {command.Number}";
 		}

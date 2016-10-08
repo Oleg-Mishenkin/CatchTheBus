@@ -1,16 +1,16 @@
 ﻿using System;
 using CatchTheBus.Service.RocketChatModels;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	public class WaitingForDesiredTimeState : IState
+	public class WaitingForDesiredTimeState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			var hoursAndMins = token.Split(new[] { ".", ":" }, StringSplitOptions.RemoveEmptyEntries);
 			if (hoursAndMins.Length != 2)
 			{
-				return new ValidationResult { IsValid = true, ErrorMessage = "Введите корректное время" };
+				return new ValidationResult { IsValid = false, ErrorMessage = "Введите корректное время" };
 			}
 
 			var hoursString = hoursAndMins[0];
@@ -19,13 +19,13 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 
 			if (!int.TryParse(hoursString, out hours) || !int.TryParse(minsString, out mins))
 			{
-				return new ValidationResult { IsValid = true, ErrorMessage = "Введите корректное время" };
+				return new ValidationResult { IsValid = false, ErrorMessage = "Введите корректное время" };
 			}
 
 			return new ValidationResult { IsValid = true };
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			var hoursAndMins = currentToken.Split(new[] { ".", ":" }, StringSplitOptions.RemoveEmptyEntries);
 			int hours = int.Parse(hoursAndMins[0]), mins = int.Parse(hoursAndMins[1]);
@@ -34,10 +34,10 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 			return new WaitingForNotifyTimeState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token) 
+		public override string GetMessageBefore(ParsedUserCommand command, string token) 
 			=> "Во сколько ты хочешь сесть на транспорт (ЧЧ:ММ)?";
 
-		public string GetMessageAfter(ParsedUserCommand command, string token) 
-			=> $"Выбранное время: {command.DesiredTime.Value.Hour}:{command.DesiredTime.Value.Minute}";
+		public override string GetMessageAfter(ParsedUserCommand command, string token) 
+			=> $"Выбранное время: {command.DesiredTime.Value.Hour.ToString("00")}:{command.DesiredTime.Value.Minute.ToString("00")}";
 	}
 }

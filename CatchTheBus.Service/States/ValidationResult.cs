@@ -1,4 +1,4 @@
-﻿namespace CatchTheBus.Service.TokenParseAlgorithms
+﻿namespace CatchTheBus.Service.States
 {
 	public class ValidationResult
 	{

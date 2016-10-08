@@ -46,6 +46,7 @@ namespace CatchTheBus.Service.Tasks
 			if (requestedTime - DateTime.Now > interval) return false;
 
 			var timeEntries = transportService.GetTimeEntries(subscription.Kind, subscription.Direction, subscription.Number, subscription.StopName).Where(x => x.Hours > targetTime.Hours || (x.Hours == targetTime.Hours && x.Minutes >= targetTime.Minutes)).OrderBy(x => x.Hours).ThenBy(x => x.Minutes);
+			if (!timeEntries.Any()) return false;
 
 			var text =
 				$"{TransportKind.GetKindLocalizedName(subscription.Kind).FirstCharToUpper()} номер {subscription.Number} будет на остановке {subscription.StopName} в \n";

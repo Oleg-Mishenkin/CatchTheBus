@@ -3,11 +3,11 @@ using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Helpers;
 using CatchTheBus.Service.RocketChatModels;
 
-namespace CatchTheBus.Service.TokenParseAlgorithms
+namespace CatchTheBus.Service.States
 {
-	public class WaitingForKindState : IState
+	public class WaitingForKindState : AbstractState
 	{
-		public ValidationResult Validate(string token, ParsedUserCommand command)
+		public override ValidationResult Validate(string token, ParsedUserCommand command)
 		{
 			return TransportKind.All.Contains(token)
 				? new ValidationResult { IsValid = true }
@@ -19,18 +19,18 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 				};
 		}
 
-		public IState ParseToken(ParsedUserCommand command, string currentToken)
+		public override AbstractState ParseToken(ParsedUserCommand command, string currentToken)
 		{
 			command.TransportKind = TransportKind.Parse(currentToken);
 			return new WaitingForNumberState();
 		}
 
-		public string GetMessageBefore(ParsedUserCommand command, string token)
+		public override string GetMessageBefore(ParsedUserCommand command, string token)
 		{
 			return null;
 		}
 
-		public string GetMessageAfter(ParsedUserCommand command, string token)
+		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
 			return $"Выбранный вид транспорта - {TransportKind.GetKindLocalizedName(command.TransportKind.Value)}";
 		}

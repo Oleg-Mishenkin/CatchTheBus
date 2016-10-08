@@ -1,6 +1,6 @@
 ﻿using System;
 using CatchTheBus.Service.Constants;
-using CatchTheBus.Service.TokenParseAlgorithms;
+using CatchTheBus.Service.States;
 
 namespace CatchTheBus.Service.RocketChatModels
 {
@@ -25,7 +25,7 @@ namespace CatchTheBus.Service.RocketChatModels
 
 		public int? NotifyTimeMinutes { get; set; }
 
-		public IState CurrentState { get; set; }
+		public AbstractState CurrentState { get; set; }
 
 		public ParsedUserCommand MergeWith(ParsedUserCommand other)
 		{
