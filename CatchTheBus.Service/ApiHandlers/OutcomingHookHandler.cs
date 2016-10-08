@@ -15,10 +15,7 @@ namespace CatchTheBus.Service.ApiHandlers
 			{
 				var msg = JsonConvert.DeserializeObject<MessageFromUserModel>(Request.Body.AsString());
 
-				var response = new MessageProcessor().GetResponse(msg.Text, msg.UserId, msg.UserName);
-				Console.WriteLine(response);
-				OutgoingMessagesHelper.Get().SendMessage(response, "@busbot");
-
+				new MessageProcessor().Handle(msg.Text, msg.UserId, msg.UserName);
 				return HttpStatusCode.OK;
 			};
 		}

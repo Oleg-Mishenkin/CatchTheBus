@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CatchTheBus.Service.Helpers;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.TokenParseAlgorithms;
@@ -8,23 +7,16 @@ namespace CatchTheBus.Service.Services
 {
 	public class MessageProcessor
 	{
-		// порядок важен
-		private readonly List<ITokenParser> _parsers = new List<ITokenParser>
-		{
-			new TransportKindParser(),
-			new TransportNumberParser(),
-			new DirectionParser(),
-			new StopToComeParser(),
-			new DesiredTimeParser(),
-			new NotifyTimeParser()
-		};
-
 		private string[] Tokenize(string str) => str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-		public string GetResponse(string str, string userId, string userName)
+		public void Handle(string str, string userId, string userName)
 		{
 			var result = ProcessSpecialMessages(str, userId, userName);
-			if (result != null) return result; // если это было специальное сообщение
+			if (result != null)
+			{
+				OutgoingMessagesHelper.Get().SendMessage(result, userName);
+				return;
+			}
 
 			var tokens = Tokenize(str);
 
@@ -32,33 +24,42 @@ namespace CatchTheBus.Service.Services
 			var command = unfinishedCommand?.Command ?? new ParsedUserCommand { UserName = userName };
 
 			int tokensToParseCount;
-			if (unfinishedCommand != null)
+			if (!(command.CurrentState is WaitingForKindState))
 			{
 				tokensToParseCount = 1; // позволяем довводить только по одной команде. ибо нефиг.
 			}
 			else
 			{
-				tokensToParseCount = Math.Min(tokens.Length, _parsers.Count);
+				tokensToParseCount = tokens.Length;
 			}
 
 			// если у нас была незаконченная команда, то мы начинаем не с самого первого парсера
-			for (int i = 0, j = (unfinishedCommand?.LastFilledStep + 1) ?? 0; i < tokensToParseCount; i++, j++)
+			for (int i = 0; i < tokensToParseCount; i++)
 			{
+				var guidingMessage = string.Empty;
+
 				var isLastToken = i == tokensToParseCount - 1;
 
 				var token = tokens[i];
-				var parser = _parsers[j];
 
-				var validationResult = parser.Validate(token, command);
+				var validationResult = command.CurrentState.Validate(token, command);
 				if (!validationResult.IsValid)
 				{
-					return validationResult.ErrorMessage;
+					OutgoingMessagesHelper.Get().SendMessage(validationResult.ErrorMessage, userName);
+					return;
 				}
 
-				var parsingResult = parser.GetResult(command, token, isLastToken);
+				var newState = command.CurrentState.ParseToken(command, token);
+
+				var messageAfter = command.CurrentState.GetMessageAfter(command, token);
+				if (!string.IsNullOrEmpty(messageAfter))
+				{
+					guidingMessage += messageAfter + "\n\n";
+				}
+
 				if (isLastToken)
 				{
-					if (command.IsCompletelyFilled()) // уже все попарсили. иначе идем на следующую итерацию
+					if (newState is SubscriptionAddedState) // уже все попарсили. иначе идем на следующую итерацию
 					{
 						UnfinishedCommandsRepository.Get().Remove(userId);
 					}
@@ -66,12 +67,22 @@ namespace CatchTheBus.Service.Services
 					{
 						UnfinishedCommandsRepository.Get().UpdateCommand(userId, command, tokensToParseCount);
 					}
+				}
 
-					return parsingResult;
+				command.CurrentState = newState;
+
+				// отправляем приветствие для новой команды
+				var messageBefore = command.CurrentState.GetMessageBefore(command, token);
+				if (!string.IsNullOrEmpty(messageBefore))
+				{
+					guidingMessage += messageBefore;
+				}
+
+				if (!string.IsNullOrEmpty(guidingMessage) && isLastToken)
+				{
+					OutgoingMessagesHelper.Get().SendMessage(guidingMessage, userName);
 				}
 			}
-
-			return "Какая жалость! Не удалось разобрать команду.";
 		}
 
 		private string ProcessSpecialMessages(string input, string userId, string userName)

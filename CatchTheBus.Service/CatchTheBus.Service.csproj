@@ -112,14 +112,15 @@
     <Compile Include="Services\UnfinishedCommandsRepository.cs" />
     <Compile Include="Tasks\ProcessSubscriptionsTask.cs" />
     <Compile Include="Tasks\TrackScheduleTask.cs" />
-    <Compile Include="TokenParseAlgorithms\DesiredTimeParser.cs" />
-    <Compile Include="TokenParseAlgorithms\DirectionParser.cs" />
-    <Compile Include="TokenParseAlgorithms\ITokenParser.cs" />
-    <Compile Include="TokenParseAlgorithms\NotifyTimeParser.cs" />
-    <Compile Include="TokenParseAlgorithms\StopToComeParser.cs" />
-    <Compile Include="TokenParseAlgorithms\TransportKindParser.cs" />
-    <Compile Include="TokenParseAlgorithms\TransportNumberParser.cs" />
+    <Compile Include="TokenParseAlgorithms\IState.cs" />
+    <Compile Include="TokenParseAlgorithms\SubscriptionAddedState.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForDesiredTimeState.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForDirectionState.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForKindState.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForNotifyTimeState.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForNumberState.cs" />
     <Compile Include="TokenParseAlgorithms\ValidationResult.cs" />
+    <Compile Include="TokenParseAlgorithms\WaitingForStopNameState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
