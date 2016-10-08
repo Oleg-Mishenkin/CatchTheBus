@@ -26,7 +26,7 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 
 			return isLast 
 					? formattedNumbers + "\n\n" +
-								$"Какой {TransportKind.GetKindLocalizedName(parsedCommand.TransportKind.Value)} нужен?"
+								$"Выберите {TransportKind.GetKindLocalizedName(parsedCommand.TransportKind.Value)}"
 					: null;
 		}
 	}
