@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
 using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Tasks;
+using CatchTheBus.Service.Tasks.OT76;
+using CatchTheBus.Service.Tasks.Yargortrans;
 using log4net;
 using log4net.Config;
 using Nancy.Hosting.Self;
@@ -44,11 +45,16 @@ namespace CatchTheBus.Service
             {
                 Log.Info("Service started");
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-                var schedulingService = new SchedulingService();
-				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Bus));
-				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Taxi));
-				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Tram));
-				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Trolleybus));
+				new YargortransStopsFillTask(TransportKind.Kind.Bus).Execute();
+				new YargortransStopsFillTask(TransportKind.Kind.Taxi).Execute();
+				new YargortransStopsFillTask(TransportKind.Kind.Tram).Execute();
+				new YargortransStopsFillTask(TransportKind.Kind.Trolleybus).Execute();
+
+				var schedulingService = new SchedulingService();
+				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Bus));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Taxi));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Tram));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Trolleybus));
 				schedulingService.At("* * * * *").Run(() => new ProcessSubscriptionsTask());
                 schedulingService.Start();
                 Host.Start();

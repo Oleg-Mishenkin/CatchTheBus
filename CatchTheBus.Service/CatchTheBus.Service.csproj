@@ -108,10 +108,12 @@
     <Compile Include="Services\OutgoingMessagesHelper.cs" />
     <Compile Include="Services\SubscriptionService.cs" />
     <Compile Include="Services\TransportRepositoryService.cs" />
-    <Compile Include="Services\UrlBuilder.cs" />
+    <Compile Include="Tasks\OT76\OT76UrlBuilder.cs" />
     <Compile Include="Services\UnfinishedCommandsRepository.cs" />
     <Compile Include="Tasks\ProcessSubscriptionsTask.cs" />
-    <Compile Include="Tasks\TrackScheduleTask.cs" />
+    <Compile Include="Tasks\OT76\TrackOT76ScheduleTask.cs" />
+    <Compile Include="Tasks\Yargortrans\YargortransStopsFillTask.cs" />
+    <Compile Include="Tasks\Yargortrans\YargortransUrlBuilder.cs" />
     <Compile Include="TokenParseAlgorithms\DesiredTimeParser.cs" />
     <Compile Include="TokenParseAlgorithms\DirectionParser.cs" />
     <Compile Include="TokenParseAlgorithms\ITokenParser.cs" />
