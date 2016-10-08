@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CatchTheBus.Service.Helpers;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.TokenParseAlgorithms;
 
@@ -22,7 +23,7 @@ namespace CatchTheBus.Service.Services
 
 		public string GetResponse(string str, string userId, string userName)
 		{
-			var result = ProcessSpecialMessages(str, userId);
+			var result = ProcessSpecialMessages(str, userId, userName);
 			if (result != null) return result; // если это было специальное сообщение
 
 			var tokens = Tokenize(str);
@@ -73,24 +74,19 @@ namespace CatchTheBus.Service.Services
 			return "Какая жалость! Не удалось разобрать команду.";
 		}
 
-		private string ProcessSpecialMessages(string input, string userId)
+		private string ProcessSpecialMessages(string input, string userId, string userName)
 		{
 			var inputLower = input.ToLower();
 			if (inputLower == "h" || input == "help" || input == "помощь")
 			{
-				return "Здесь будет подсказка";
+				return HintHelper.Help;
 			}
 
 			if (inputLower == "сброс")
 			{
-				if (UnfinishedCommandsRepository.Get().Remove(userId))
-				{
-					return "Ваши подписки на транспорт удалены";
-				}
-				else
-				{
-					return "У вас нет подписок на транспорт";
-				}
+				UnfinishedCommandsRepository.Get().Remove(userId);
+				SubscriptionService.Instance.RemoveAllSubscriptions(userName);
+				return "Ваши подписки на транспорт и незавершенные команды удалены";
 			}
 
 			return null;

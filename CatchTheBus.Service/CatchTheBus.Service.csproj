@@ -81,6 +81,7 @@
     <Compile Include="Constants\DirectionDescription.cs" />
     <Compile Include="Constants\DirectionType.cs" />
     <Compile Include="Constants\TransportKind.cs" />
+    <Compile Include="Helpers\HintHelper.cs" />
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>

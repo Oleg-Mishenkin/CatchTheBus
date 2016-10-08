@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CatchTheBus.Service.Constants;
+using CatchTheBus.Service.Helpers;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
 
@@ -11,7 +12,9 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		{
 			return TransportKind.All.Contains(str)
 				? new ValidationResult { IsValid = true }
-				: new ValidationResult { IsValid = false, ErrorMessage = "Некорректный вид транспорта" };
+				: new ValidationResult { IsValid = false, ErrorMessage =
+					$"Некорректный вид транспорта. Прочтите помощь по использованию бота:\n\n{HintHelper.Help}"
+				};
 		}
 
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
