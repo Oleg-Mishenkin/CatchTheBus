@@ -3,13 +3,13 @@ using System.Configuration;
 using System.Reflection;
 using CatchTheBus.Service.Constants;
 
-namespace CatchTheBus.Service.Services
+namespace CatchTheBus.Service.Tasks.OT76
 {
-    public static class UrlBuilder
+    public static class OT76UrlBuilder
     {
         public static Uri GetBaseUrl()
         {
-            return new Uri(ConfigurationManager.AppSettings["TrackUrl"]);
+            return new Uri(ConfigurationManager.AppSettings["OT76TrackUrl"]);
         }
 
         public static Uri GetBusListUrl()
@@ -34,7 +34,7 @@ namespace CatchTheBus.Service.Services
 
 	    public static Uri GetUriByTransportKind(TransportKind.Kind kind)
 	    {
-			Type type = typeof(UrlBuilder);
+			Type type = typeof(OT76UrlBuilder);
 			MethodInfo method = type.GetMethod("Get" + kind + "ListUrl");
 		    return method.Invoke(null, null) as Uri;
 	    }

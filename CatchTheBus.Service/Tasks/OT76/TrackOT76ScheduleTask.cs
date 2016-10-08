@@ -10,25 +10,25 @@ using CatchTheBus.Service.Models;
 using CatchTheBus.Service.Services;
 using log4net;
 
-namespace CatchTheBus.Service.Tasks
+namespace CatchTheBus.Service.Tasks.OT76
 {
-    public class TrackScheduleTask : NCron.CronJob
+    public class TrackOT76ScheduleTask : NCron.CronJob
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 	    private readonly TransportKind.Kind Kind;
 
-		public TrackScheduleTask(TransportKind.Kind kind)
+		public TrackOT76ScheduleTask(TransportKind.Kind kind)
 		{
 			Kind = kind;
 		}
 
 		public override void Execute()
         {
-            Logger.Info("Start executing " + nameof(TrackScheduleTask));
+            Logger.Info("Start executing " + nameof(TrackOT76ScheduleTask));
             try
             {
 				var config = Configuration.Default.WithDefaultLoader();
-                var address = UrlBuilder.GetUriByTransportKind(Kind);
+                var address = OT76UrlBuilder.GetUriByTransportKind(Kind);
                 var document = BrowsingContext.New(config).OpenAsync(address.AbsoluteUri).Result;
 
 				var stopwatch = new Stopwatch();
@@ -60,11 +60,11 @@ namespace CatchTheBus.Service.Tasks
 
 				var olditem = existingItems.FirstOrDefault(x => x.Number == number);
 				var item = new TransportListItem();
-				item.Url = m.Attributes["href"].Value;
+				item.Url = m.Attributes["href"].Value.Trim();
 				item.Description = description;
 				item.Number = number;
-				item.ForwardDirection = olditem?.ForwardDirection ?? new Direction();
-				item.BackwardDirection = olditem?.BackwardDirection ?? new Direction();
+				item.ForwardDirection = olditem?.ForwardDirection ?? new Direction { Type = DirectionType.Forward };
+				item.BackwardDirection = olditem?.BackwardDirection ?? new Direction { Type = DirectionType.Backward };
 				item.ForwardDirection.BusStops = item.ForwardDirection.BusStops ?? new Dictionary<string, List<TimeEntry>>();
 				item.BackwardDirection.BusStops = item.BackwardDirection.BusStops ?? new Dictionary<string, List<TimeEntry>>();
 				// remove old time entries
@@ -98,7 +98,6 @@ namespace CatchTheBus.Service.Tasks
 				    if (innerTr.InnerHtml.Contains(DirectionDescription.ForwardDirection))
 				    {
 					    found = true;
-					    item.ForwardDirection.Type = DirectionType.Forward;
 					    var description = innerTr.QuerySelector("td h3").InnerHtml;
 					    description = description.Substring(description.IndexOf("<br>", StringComparison.InvariantCulture) + 5);
 
@@ -109,7 +108,6 @@ namespace CatchTheBus.Service.Tasks
 				    if (innerTr.InnerHtml.Contains(DirectionDescription.BackwardDirection))
 				    {
 					    found = false;
-					    item.BackwardDirection.Type = DirectionType.Backward;
 					    var description = innerTr.QuerySelector("td h3").InnerHtml;
 					    description = description.Substring(description.IndexOf("<br>", StringComparison.InvariantCulture) + 5);
 
