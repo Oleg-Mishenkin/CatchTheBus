@@ -20,12 +20,12 @@ namespace CatchTheBus.Service.Services
 
 		private string[] Tokenize(string str) => str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-		public string GetResponse(string str, string userId)
+		public string GetResponse(string str, string userId, string userName)
 		{
 			var tokens = Tokenize(str);
 
 			var unfinishedCommand = UnfinishedCommandsRepository.Get().GetCommandForUser(userId);
-			var command = unfinishedCommand?.Command ?? new ParsedUserCommand();
+			var command = unfinishedCommand?.Command ?? new ParsedUserCommand { UserName = userId };
 
 			int tokensToParseCount;
 			if (unfinishedCommand != null)

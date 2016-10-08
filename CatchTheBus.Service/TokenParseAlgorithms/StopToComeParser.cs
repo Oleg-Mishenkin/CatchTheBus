@@ -21,7 +21,9 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
-			parsedCommand.StopToCome = currentToken;
+			var stops = TransportRepositoryService.Instance.GetStopNames(parsedCommand.TransportKind.Value, parsedCommand.Number, parsedCommand.Direction.Value);
+
+			parsedCommand.StopToCome = stops.First(x => x.StartsWith(currentToken, StringComparison.InvariantCultureIgnoreCase));
 			return isLast ? "Во сколько ты бы хотел сесть на транспорт (ЧЧ:ММ)?" : null;
 		}
 	}

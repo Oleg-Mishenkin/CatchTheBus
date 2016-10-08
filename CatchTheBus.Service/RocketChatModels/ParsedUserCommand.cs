@@ -5,6 +5,8 @@ namespace CatchTheBus.Service.RocketChatModels
 {
 	public class ParsedUserCommand
 	{
+		public string UserName { get; set; }
+
 		public TransportKind.Kind? TransportKind { get; set; }
 
 		public string Number { get; set; }

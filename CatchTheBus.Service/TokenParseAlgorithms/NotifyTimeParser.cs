@@ -1,4 +1,7 @@
-﻿using CatchTheBus.Service.RocketChatModels;
+﻿using CatchTheBus.Service.Constants;
+using CatchTheBus.Service.Models;
+using CatchTheBus.Service.RocketChatModels;
+using CatchTheBus.Service.Services;
 
 namespace CatchTheBus.Service.TokenParseAlgorithms
 {
@@ -28,7 +31,22 @@ namespace CatchTheBus.Service.TokenParseAlgorithms
 		public string GetResult(ParsedUserCommand parsedCommand, string currentToken, bool isLast)
 		{
 			parsedCommand.NotifyTimeMinutes = int.Parse(currentToken);
-			return isLast ? "Зарегистрировано" : null;
+
+			// ReSharper disable PossibleInvalidOperationException
+			SubscriptionService.Instance.SaveUserSubscription(parsedCommand.UserName, new Subscription
+			{
+				Number = parsedCommand.Number,
+				Direction = parsedCommand.Direction.Value,
+				Kind = parsedCommand.TransportKind.Value,
+				RequestedHours = parsedCommand.DesiredTime.Value.Hour,
+				RequestedMinutes = parsedCommand.DesiredTime.Value.Minute,
+				StopName = parsedCommand.StopToCome,
+				NotifyTimeSpan = parsedCommand.NotifyTimeMinutes.Value
+			});
+			// ReSharper restore PossibleInvalidOperationException
+
+			return isLast ? $"Хорошо. Я сообщу о том, что {TransportKind.GetKindLocalizedName(parsedCommand.TransportKind.Value)} " +
+			                $"номер *{parsedCommand.Number}* будет на остановке *{parsedCommand.StopToCome}* за *{parsedCommand.NotifyTimeMinutes}* минут" : null;
 		}
 	}
 }
