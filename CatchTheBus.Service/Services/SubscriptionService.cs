@@ -37,6 +37,12 @@ namespace CatchTheBus.Service.Services
 			subscriptions.Remove(subscription);
 		}
 
+		public void RemoveAllSubscriptions(string userName)
+		{
+			List<Subscription> removed;
+			_subscriptions.TryRemove(userName, out removed);
+		}
+
 		public void SaveUserSubscription(string userName, Subscription item)
 		{
 			_subscriptions.AddOrUpdate(userName, new List<Subscription> { item }, (key, list) => { list.Add(item); return list;});

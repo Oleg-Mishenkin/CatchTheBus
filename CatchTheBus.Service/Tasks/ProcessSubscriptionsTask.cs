@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using CatchTheBus.Service.Constants;
@@ -15,7 +16,6 @@ namespace CatchTheBus.Service.Tasks
 		public override void Execute()
 		{
 			Logger.Info("Start executing " + nameof(ProcessSubscriptionsTask));
-
 			var subscriptionService = SubscriptionService.Instance;
 			var transportService = TransportRepositoryService.Instance;
 			try
@@ -42,17 +42,21 @@ namespace CatchTheBus.Service.Tasks
 			TimeSpan interval = new TimeSpan(0, subscription.NotifyTimeSpan, 0);
 			TimeSpan targetTime = new TimeSpan(subscription.RequestedHours, subscription.RequestedMinutes, 0);
 
-			if (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, subscription.RequestedHours, subscription.RequestedMinutes, DateTime.Now.Second) - DateTime.Now > interval) return false;
+			var requestedTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, subscription.RequestedHours, subscription.RequestedMinutes, DateTime.Now.Second);
+			if (requestedTime - DateTime.Now > interval) return false;
 
-			var timeEntries = transportService.GetTimeEntries(subscription.Kind, subscription.Direction, subscription.Number, subscription.StopName).Where(x => x.Hours > targetTime.Hours || (x.Hours == targetTime.Hours && x.Minutes == targetTime.Minutes)).OrderBy(x => x.Hours).ThenBy(x => x.Minutes);
+			var timeEntries = transportService.GetTimeEntries(subscription.Kind, subscription.Direction, subscription.Number, subscription.StopName).Where(x => x.Hours > targetTime.Hours || (x.Hours == targetTime.Hours && x.Minutes >= targetTime.Minutes)).OrderBy(x => x.Hours).ThenBy(x => x.Minutes);
 
 			var text =
-				$"{TransportKind.GetKindLocalizedName(subscription.Kind).FirstCharToUpper()} номер {subscription.Number} будет на остановке {subscription.StopName} в ";
-			text += string.Join("\n", timeEntries.Select(x => $"{x.Hours}:{x.Minutes}").ToArray());
+				$"{TransportKind.GetKindLocalizedName(subscription.Kind).FirstCharToUpper()} номер {subscription.Number} будет на остановке {subscription.StopName} в \n";
+			text += string.Join("\n", timeEntries.Select(x => $"{x.Hours.ToString("00")}:{x.Minutes.ToString("00")}").ToArray());
 
 			OutgoingMessagesHelper.Get().SendMessage(text, userName);
 
-			return true;
+			if (DateTime.Now > requestedTime)
+				return true;
+
+			return false;
 		}
 
 	}

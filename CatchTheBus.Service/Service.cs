@@ -45,10 +45,11 @@ namespace CatchTheBus.Service
                 Log.Info("Service started");
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
                 var schedulingService = new SchedulingService();
-                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Bus));
-                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Taxi));
-                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Tram));
-                schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Trolleybus));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Bus));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Taxi));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Tram));
+				schedulingService.At("*/5 * * * *").Run(() => new TrackScheduleTask(TransportKind.Kind.Trolleybus));
+				schedulingService.At("* * * * *").Run(() => new ProcessSubscriptionsTask());
                 schedulingService.Start();
                 Host.Start();
             }

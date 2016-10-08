@@ -147,7 +147,8 @@ namespace CatchTheBus.Service.Tasks
 					mergeToBusStops[busStop.Name].Add(busStop.TimeEntry);
 				}
 
-				mergeToBusStops[busStop.Name] = new List<TimeEntry> { busStop.TimeEntry };
+				else
+					mergeToBusStops[busStop.Name] = new List<TimeEntry> { busStop.TimeEntry };
 			}
 	    }
 

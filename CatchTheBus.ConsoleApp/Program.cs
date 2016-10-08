@@ -1,5 +1,6 @@
 ﻿using System;
 using CatchTheBus.Service.Constants;
+using CatchTheBus.Service.Models;
 using CatchTheBus.Service.Services;
 using CatchTheBus.Service.Tasks;
 using Nancy.Hosting.Self;
@@ -11,7 +12,18 @@ namespace CatchTheBus.ConsoleApp
         static void Main(string[] args)
         {
 			new TrackScheduleTask(TransportKind.Kind.Tram).Execute();
+			SubscriptionService.Instance.SaveUserSubscription("@busbot", new Subscription
+			{
+				Direction = DirectionType.Forward,
+				Kind = TransportKind.Kind.Tram,
+				Number = "5с",
+				RequestedHours = 11,
+				RequestedMinutes = 40,
+				StopName = "ЯМЗ",
+				NotifyTimeSpan = 30
+			});
 
+			new ProcessSubscriptionsTask().Execute();
 			/*using (var client = new WebClient())
 			{
 				var url = ConfigurationManager.AppSettings["IncomingWebhookUrl"];

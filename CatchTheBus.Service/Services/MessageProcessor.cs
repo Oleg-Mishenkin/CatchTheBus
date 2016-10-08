@@ -28,7 +28,7 @@ namespace CatchTheBus.Service.Services
 			var tokens = Tokenize(str);
 
 			var unfinishedCommand = UnfinishedCommandsRepository.Get().GetCommandForUser(userId);
-			var command = unfinishedCommand?.Command ?? new ParsedUserCommand { UserName = userId };
+			var command = unfinishedCommand?.Command ?? new ParsedUserCommand { UserName = userName };
 
 			int tokensToParseCount;
 			if (unfinishedCommand != null)
