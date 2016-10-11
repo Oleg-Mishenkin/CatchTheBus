@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
@@ -23,7 +24,8 @@ namespace CatchTheBus.Service
             // init logging
             var log4netConfig = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
             XmlConfigurator.ConfigureAndWatch(new FileInfo(log4netConfig));
-            Host = new NancyHost(new Uri("http://localhost:8080"));
+			var listenHost = ConfigurationManager.AppSettings["ListenHost"];
+			Host = new NancyHost(new Uri(listenHost ?? "http://localhost:8080"));
         }
 
         public Service()
