@@ -57,7 +57,7 @@ namespace CatchTheBus.Service
 				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Taxi));
 				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Tram));
 				schedulingService.At("*/5 * * * *").Run(() => new TrackOT76ScheduleTask(TransportKind.Kind.Trolleybus));
-				schedulingService.At("* * * * *").Run(() => new ProcessSubscriptionsTask());
+				schedulingService.At("*/5 * * * *").Run(() => new ProcessSubscriptionsTask());
                 schedulingService.Start();
                 Host.Start();
             }
