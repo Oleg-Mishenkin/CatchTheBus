@@ -1,4 +1,5 @@
-﻿using CatchTheBus.Service.Constants;
+﻿using System.Linq;
+using CatchTheBus.Service.Constants;
 using CatchTheBus.Service.Models;
 using CatchTheBus.Service.RocketChatModels;
 using CatchTheBus.Service.Services;
@@ -48,8 +49,10 @@ namespace CatchTheBus.Service.States
 			return new SubscriptionAddedState();
 		}
 
-		public override string GetMessageBefore(ParsedUserCommand command, string token) 
-			=> "За сколько минут до прибытия транспорта предупредить?";
+		public override string GetMessageBefore(ParsedUserCommand command, string token)
+		{
+			return "За сколько минут до прибытия транспорта предупредить?";
+		}
 
 		public override string GetMessageAfter(ParsedUserCommand command, string token)
 		{
